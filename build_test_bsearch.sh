@@ -1,0 +1,118 @@
+#!/bin/bash
+
+BUILD_COMMON="-o test_bsearch test_bsearch.cpp"
+
+if [[ ${MACHTYPE} =~ "-apple-darwin" ]]; then :
+	# Darwin has its timer framework linked in by default
+else
+	BUILD_COMMON+=" -lrt"
+fi
+
+# avoid thumb on arm
+UNAME_MACHINE=`uname -m`
+
+if [[ $UNAME_MACHINE == "armv7l" ]]; then
+	CFLAGS+=(
+		-marm
+		-mfpu=neon
+		-DCACHELINE_SIZE=32
+	)
+elif [[ $UNAME_MACHINE == "aarch64" ]] && [[ ${HOSTTYPE:0:3} == "arm" ]]; then
+	# for armv8 devices with aarch64 kernels + armv7 userspaces
+	CFLAGS+=(
+		-marm
+		-mfpu=neon
+		-DCACHELINE_SIZE=64
+	)
+fi
+
+if [[ $1 == "debug" ]]; then
+	CFLAGS+=(
+		-Wall
+		-O0
+		-g
+		-DDEBUG)
+
+	BUILD_CMD="clang++ "$BUILD_COMMON" "${CFLAGS[@]}" -fpermissive"
+else
+	# enable some optimisations that may or may not be enabled by the global optimisation level of choice in this compiler version
+	CFLAGS+=(
+		-ffast-math
+		-fstrict-aliasing
+		-fstrict-overflow
+		-funroll-loops
+		-fomit-frame-pointer
+		-O3
+		-DNDEBUG)
+fi
+
+if [[ $HOSTTYPE == "aarch64" ]] || [[ ${HOSTTYPE:0:3} == "arm" ]]; then
+	# some compilers like clang may fail auto-detecting the host armv7/armv8 cpu; collect all part numbers
+	UARCH=`cat /proc/cpuinfo | grep "^CPU part" | sed s/^[^[:digit:]]*//`
+
+	# list in order of preference, in case of big.LITTLE (armv7 and armv8 lumped together)
+	if   [ `echo $UARCH | grep -c 0xd09` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv8-a
+			-mtune=cortex-a73
+		)
+	elif [ `echo $UARCH | grep -c 0xd08` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv8-a
+			-mtune=cortex-a72
+		)
+	elif [ `echo $UARCH | grep -c 0xd07` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv8-a
+			-mtune=cortex-a57
+		)
+	elif [ `echo $UARCH | grep -c 0xd03` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv8-a
+			-mtune=cortex-a53
+		)
+	elif [ `echo $UARCH | grep -c 0xc0f` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv7-a
+			-mtune=cortex-a15
+		)
+	elif [ `echo $UARCH | grep -c 0xc0e` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv7-a
+			-mtune=cortex-a17
+		)
+	elif [ `echo $UARCH | grep -c 0xc09` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv7-a
+			-mtune=cortex-a9
+		)
+	elif [ `echo $UARCH | grep -c 0xc08` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv7-a
+			-mtune=cortex-a8
+		)
+	elif [ `echo $UARCH | grep -c 0xc07` -ne 0 ]; then
+		CFLAGS+=(
+			-march=armv7-a
+			-mtune=cortex-a7
+		)
+	fi
+
+else
+	CFLAGS+=(
+		-march=native
+		-mtune=native
+	)
+fi
+
+if [[ $1 == "gcc" ]]; then
+	BUILD_CMD="g++ "$BUILD_COMMON" "${CFLAGS[@]}" -fpermissive"
+elif [[ $1 == "clang" ]]; then
+	BUILD_CMD="clang++ "$BUILD_COMMON" "${CFLAGS[@]}" -Wno-shift-op-parentheses"
+elif [[ $1 != "debug" ]]; then
+	echo usage: $0 "{ gcc | clang | debug }"
+	exit -1
+fi
+
+echo $BUILD_CMD
+$BUILD_CMD
