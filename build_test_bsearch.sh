@@ -24,6 +24,10 @@ elif [[ $UNAME_MACHINE == "aarch64" ]] && [[ ${HOSTTYPE:0:3} == "arm" ]]; then
 		-mfpu=neon
 		-DCACHELINE_SIZE=64
 	)
+else
+	CFLAGS+=(
+		-DCACHELINE_SIZE=64
+	)
 fi
 
 if [[ $1 == "debug" ]]; then
