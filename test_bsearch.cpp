@@ -25,7 +25,7 @@ static const char arg_alt[] = "alt";
 static const size_t log2_lead_in = 4; // number of top-level bsearch iterations bypassed during binned bsearch
 static const size_t lead_in = 1 << log2_lead_in;
 static const size_t log2_subsize = 4; // depth of the individual tree in the Van Emde Boas forest
-static const size_t alignment = 1 << 12; // search space address alignment
+static const size_t alignment = 1 << 6; // search space address alignment
 
 size_t found[1];
 size_t obfuscator;
@@ -657,6 +657,12 @@ int main(
 
 	const uint64_t s0 = timer_ns();
 
+	// generate 'search sample' - a random array of type searchitem_t and size rep
+	const aligned_ptr< searchitem_t, alignment > sample(rep);
+
+	for (size_t i = 0; i < rep; ++i)
+		sample[i] = searchitem_t(rand() % unsigned(space_size));
+
 	// generate 'search space' - a sorted array from 0 to space_size - 1
 	aligned_ptr< searchitem_t, alignment > space;
 
@@ -715,12 +721,7 @@ int main(
 		printf("verifying standard %s consistency..\n", search == lsearch_standard ? "lsearch" : "bsearch");
 	}
 
-	// generate 'search sample' - a random array of type searchitem_t and size rep
-	const aligned_ptr< searchitem_t, alignment > sample(rep);
-
-	for (size_t i = 0; i < rep; ++i)
-		sample[i] = searchitem_t(rand() % unsigned(space_size));
-
+#if 0
 	const size_t verify_small = 64;
 	const size_t verify_large = 2048;
 
@@ -728,6 +729,7 @@ int main(
 		if (verify(i, 0))
 			return -1;
 
+#endif
 	if (verify(space_size, space))
 		return -1;
 
