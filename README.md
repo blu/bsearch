@@ -19,9 +19,9 @@ $ ./build_test_bsearch.sh
 usage: ./build_test_bsearch.sh { gcc | clang | debug }
 ```
 
-* gcc   - picks the system-default g++ compiler and builds a release binary
-* clang - picks the system-default clang++ compiler and builds a release binary
-* debug - picks the system-default clang++ compiler and builds a debug binary
+* gcc   - use the system-default g++ compiler to build a release binary
+* clang - use the system-default clang++ compiler to build a release binary
+* debug - use the system-default clang++ compiler to build a debug binary
 
 How to benchmark
 ----------------
@@ -47,7 +47,7 @@ $ ./test_bsearch space_size $(echo "2^24" | bc) alt 0
 
 Warning: don't run any of the linear searches (`alt` 5 & 6) on large seach spaces unless you have unlimited machine time and patience.
 
-Some results as graphs
-----------------------
+Results as graphs
+-----------------
 
 ![10M average searches/second](images/bsearch_graph_000.png "average searchs/s")
