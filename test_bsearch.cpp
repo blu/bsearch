@@ -6,12 +6,17 @@
 
 #include "timer.h"
 #include "aligned_ptr.hpp"
+#include "compile_assert.hpp"
+#include "rand.hpp"
 
 #define ROUTINE_ALIGNMENT CACHELINE_SIZE
 
 #if _LP64 || __LP64__
 #define FMT_ULONG "%lu"
 #define FMT_XLONG "%lx"
+#elif __POINTER_WIDTH__ == 64
+#define FMT_ULONG "%llu"
+#define FMT_XLONG "%llx"
 #else
 #define FMT_ULONG "%u"
 #define FMT_XLONG "%x"
@@ -567,10 +572,16 @@ static int parse_cli(
 		double input;
 
 		if (0 == strcmp(argv[i], arg_space_size)) {
+			const unsigned max_size = 1U << 24;
 			if (argc > i + 1 && 1 == sscanf(argv[++i], "%lf", &input) && 0 < input) {
-				if (input > unsigned(-1)) {
+				if (input > max_size) {
 					fprintf(stderr, "error: %s should not exceed %u\n",
-						arg_space_size, 1U << 24);
+						arg_space_size, max_size);
+					return -1;
+				}
+				if (0 != (unsigned(input) & unsigned(input) - 1)) {
+					fprintf(stderr, "error: %s should be a power of two\n",
+						arg_space_size);
 					return -1;
 				}
 
@@ -658,10 +669,17 @@ int main(
 	const uint64_t s0 = timer_ns();
 
 	// generate 'search sample' - a random array of type searchitem_t and size rep
+	const compile_assert< 0 == (rnd::rand_max & rnd::rand_max + 1LL) > assert_rand_max_is_pot_minus_one;
 	const aligned_ptr< searchitem_t, alignment > sample(rep);
 
+	const unsigned log2_rand = bitcount(rnd::rand_max);
+	assert(0 == (space_size & space_size - 1));
+	const unsigned log2_space = log2_from_pot(space_size);
+	assert(log2_rand >= log2_space);
+	unsigned seed = 42;
+
 	for (size_t i = 0; i < rep; ++i)
-		sample[i] = searchitem_t(rand() % unsigned(space_size));
+		sample[i] = searchitem_t(rnd::rand_r(&seed) >> log2_rand - log2_space);
 
 	// generate 'search space' - a sorted array from 0 to space_size - 1
 	aligned_ptr< searchitem_t, alignment > space;

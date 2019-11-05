@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_COMMON="-o test_bsearch test_bsearch.cpp"
+BUILD_COMMON="-o test_bsearch test_bsearch.cpp rand.cpp"
 
 if [[ ${MACHTYPE} =~ "-apple-darwin" ]]; then :
 	# Darwin has its timer framework linked in by default
@@ -30,8 +30,6 @@ if [[ $1 == "debug" ]]; then
 		-O0
 		-g
 		-DDEBUG)
-
-	BUILD_CMD="clang++ "$BUILD_COMMON" "${CFLAGS[@]}" -fpermissive"
 else
 	# enable some optimisations that may or may not be enabled by the global optimisation level of choice in this compiler version
 	CFLAGS+=(
@@ -154,7 +152,9 @@ if [[ $1 == "gcc" ]]; then
 	BUILD_CMD="g++ "$BUILD_COMMON" "${CFLAGS[@]}" -fpermissive"
 elif [[ $1 == "clang" ]]; then
 	BUILD_CMD="clang++ "$BUILD_COMMON" "${CFLAGS[@]}" -Wno-shift-op-parentheses"
-elif [[ $1 != "debug" ]]; then
+elif [[ $1 == "debug" ]]; then
+	BUILD_CMD="clang++ "$BUILD_COMMON" "${CFLAGS[@]}
+else
 	echo usage: $0 "{ gcc | clang | debug }"
 	exit -1
 fi
