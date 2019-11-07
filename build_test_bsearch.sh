@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_COMMON="-o test_bsearch test_bsearch.cpp rand.cpp"
+BUILD_COMMON="-o test_bsearch main.cpp rand.cpp"
 
 if [[ ${MACHTYPE} =~ "-apple-darwin" ]]; then :
 	# Darwin has its timer framework linked in by default
