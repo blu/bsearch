@@ -33,6 +33,8 @@ if [[ $1 == "debug" ]]; then
 else
 	# enable some optimisations that may or may not be enabled by the global optimisation level of choice in this compiler version
 	CFLAGS+=(
+		-fno-exceptions
+		-fno-rtti
 		-ffast-math
 		-fstrict-aliasing
 		-fstrict-overflow
