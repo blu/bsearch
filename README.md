@@ -73,5 +73,7 @@ Averaged searches/second from 10M random binary searches in a 64MB dataset -- se
 | NXP LX2160A 2.0GHz, DDR4-2400 x 64-bit = 19.2GB/s, clang++-8.0.0, A64      |          468,871 |          532,058 |        1,389,208 |        3,058,224 |        3,049,864 |
 | Tegra 210 1.428GHz, LPDDR4-3200 x 64-bit = 25.6GB/s, g++-8.2.0, A64        |          327,418 |          433,628 |          818,782 |        2,072,252 |        2,050,263 |
 | Tegra 210 1.428GHz, LPDDR4-3200 x 64-bit = 25.6GB/s, clang++-6, A64        |          323,666 |          434,564 |          824,378 |        1,924,824 |        1,953,150 |
+| Snapdragon SQ1 3.0GHz, LPDDR4-4267 x 128-bit = 68.26GB/s, g++-10.0.1, A64  |          957,554 |          977,243 |        2,045,156 |        4,421,279 |        4,433,569 |
+| Snapdragon SQ1 3.0GHz, LPDDR4-4267 x 128-bit = 68.26GB/s, clang++-9, A64   |          941,382 |        1,000,550 |        2,035,532 |        4,442,965 |        4,411,135 |
 
 ![10M average searches/second](images/bsearch_graph_000.png "average searchs/s")
