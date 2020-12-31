@@ -54,8 +54,12 @@ Averaged searches/second from 10M random binary searches in a 64MB dataset -- se
 
 | CPU (single thread only)                                                   | bsearch_standard | bsearch_binned   | bsearch_breadth  | bsearch_veb      | bsearch_veb_iter |
 | :------------------------------------------------------------------------- | ---------------: | ---------------: | ---------------: | ---------------: | ---------------: |
+| Intel E3-1270v2 3.9GHz, DDR3-1600 x 128-bit = 25.6GB/s, g++-4.9.4          |        2,368,386 |        2,367,576 |        4,676,543 |        7,733,798 |        7,916,109 |
+| Intel E3-1270v2 3.9GHz, DDR3-1600 x 128-bit = 25.6GB/s, clang++-3.6.2      |        2,340,876 |        2,355,943 |        4,787,252 |        7,749,015 |        7,395,371 |
 | Intel E3-1270v2 1.6GHz, DDR3-1600 x 128-bit = 25.6GB/s, g++-4.9.4          |        1,233,215 |        1,314,080 |        2,067,070 |        3,686,770 |        3,754,413 |
 | Intel E3-1270v2 1.6GHz, DDR3-1600 x 128-bit = 25.6GB/s, clang++-3.6.2      |        1,182,673 |        1,307,087 |        2,066,907 |        3,682,098 |        3,431,577 |
+| Intel W-2155 4.5GHz, DDR4-2666 x 256-bit = 85.3GB/s, g++-10.2              |        1,988,754 |        2,163,868 |        4,237,943 |        6,622,578 |        6,646,915 |
+| Intel W-2155 4.5GHz, DDR4-2666 x 256-bit = 85.3GB/s, clang++-10.0          |        2,004,589 |        2,206,814 |        3,950,995 |        8,030,376 |        8,045,392 |
 | Mediatek MT8173C 2.1GHz, LPDDR3-1600 x 64-bit = 12.8GB/s, g++-8.1.0, A64   |          490,095 |          526,391 |          744,652 |        2,035,683 |        2,031,427 |
 | Mediatek MT8173C 2.1GHz, LPDDR3-1600 x 64-bit = 12.8GB/s, clang++-5, A64   |          505,499 |          526,628 |          724,331 |        2,051,007 |        2,052,157 |
 | Rockchip RK3399 2.0GHz, LPDDR3-1600 x 64-bit = 12.8GB/s, g++-8.1.0, A64    |          462,760 |          478,643 |          738,867 |        2,038,539 |        2,046,880 |
@@ -75,5 +79,6 @@ Averaged searches/second from 10M random binary searches in a 64MB dataset -- se
 | Tegra 210 1.428GHz, LPDDR4-3200 x 64-bit = 25.6GB/s, clang++-6, A64        |          323,666 |          434,564 |          824,378 |        1,924,824 |        1,953,150 |
 | Snapdragon SQ1 3.0GHz, LPDDR4-4267 x 128-bit = 68.26GB/s, g++-10.0.1, A64  |          957,554 |          977,243 |        2,045,156 |        4,421,279 |        4,433,569 |
 | Snapdragon SQ1 3.0GHz, LPDDR4-4267 x 128-bit = 68.26GB/s, clang++-9, A64   |          941,382 |        1,000,550 |        2,035,532 |        4,442,965 |        4,411,135 |
+| Apple M1 3.2GHz, LPDDR4-4267 x 128-bit = 68.26GB/s, apple-clang++-12, A64  |        2,958,828 |        2,988,595 |        8,042,966 |       10,160,952 |       10,153,486 |
 
 ![10M average searches/second](images/bsearch_graph_000.png "average searchs/s")
