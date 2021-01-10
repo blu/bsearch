@@ -85,4 +85,4 @@ Averaged searches/second from 10M random binary searches in a 64MB dataset -- se
 | Apple A12z 2.49GHz, LPDDR4-4266 x 128-bit = 68.26GB/s, apple-clang++-12, A64 |        1,838,669 |        1,916,958 |        4,544,838 |        7,013,375 |        7,028,870 |
 | Apple M1 3.2GHz, LPDDR4-4266 x 128-bit = 68.26GB/s, apple-clang++-12, A64    |        2,958,828 |        2,988,595 |        8,042,966 |       10,160,952 |       10,153,486 |
 
-![10M average searches/second](images/bsearch_graph_000.png "average searchs/s")
+![10M average searches/second](images/bsearch_graph_001.png "average searchs/s")
